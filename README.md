@@ -1,9 +1,14 @@
 ## About
 Research how to implement swagger on go (go.mod) using gorilla mux & net/http
-
+[]()
 
 ## Librarries
 ```
+## Librarries
+
+```
+# go version
+go 1.18
 # Web Framework & Router
 github.com/gorilla/mux
 net/http
