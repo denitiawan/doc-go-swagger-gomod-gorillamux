@@ -1,9 +1,13 @@
 ## About
 Research how to implement swagger on go (go.mod) using gorilla mux & net/http
-
+![image](https://github.com/denitiawan/research-swagger-gomod-gorillamux/assets/11941308/629ea8be-b404-4a55-bae8-f5846b3f6930)
 
 ## Librarries
+
 ```
+# go version
+go 1.18
+
 # Web Framework & Router
 github.com/gorilla/mux
 net/http
@@ -55,6 +59,4 @@ database : database
 
 
 ## How to setup swagger on (go.mod & Gorilla Mux)
-### 
-### 
-### 
+- [Setup Swagger in GO + Gorilla Mux](https://github.com/denitiawan/research-swagger-gomod-gorillamux/blob/main/tmp/readme/setup_swagger.md)
