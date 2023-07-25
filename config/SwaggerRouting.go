@@ -11,8 +11,6 @@ import (
 // http://localhost:8810/nexsoft/doc/api/swagger/index.html
 func SwaggerRouting(router *mux.Router) {
 	prefix := "/nexsoft/doc/api"
-	//swaggerUri := prefix + "/swagger/*any"
-
 	router.PathPrefix(prefix).Handler(httpSwagger.Handler(
 		httpSwagger.URL("doc.json"),
 		//httpSwagger.DeepLinking(true),
