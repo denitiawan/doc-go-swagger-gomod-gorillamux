@@ -18,14 +18,29 @@ func NewAuthController(service AuthService) *AuthController {
 	}
 }
 
-func (controller *AuthController) Login(response http.ResponseWriter, request *http.Request) {
+// @Tags			auth
+// @Router			/v1/auth/login [post]
+// @Summary			login
+// @Description		Get JWT token for access all APIs
+// @Param			RequestBody body LoginDto true "LoginDto.go"
+// @Produce			application/json
+// @Success			200 {object} user.UserDto{} "Response Success (UserDto.go)"
+func (c *AuthController) Login(response http.ResponseWriter, request *http.Request) {
 	log.Info().Msg("Login")
 
+	// req body
 	reqBody, _ := ioutil.ReadAll(request.Body)
-
 	var dto LoginDto
 	json.Unmarshal(reqBody, &dto)
-	data := controller.service.Login(dto)
 
-	baseController.CreateWebResponse(http.StatusOK, "OK", data, response, request)
+	// service
+	res := c.service.Login(dto)
+	if res.Error != nil {
+		baseController.Error(res.Message, nil, res.ErrorMessage, response, request)
+		return
+	}
+
+	// ok
+	baseController.OK(res.Message, res.Data, "", response, request)
+
 }

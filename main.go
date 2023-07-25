@@ -1,58 +1,72 @@
 package main
 
 import (
-	"denitiawan/research-swagger-gomod-gorillamux/common/helper"
+	"denitiawan/research-swagger-gomod-gorillamux/common/error"
 	"denitiawan/research-swagger-gomod-gorillamux/config"
+	_ "denitiawan/research-swagger-gomod-gorillamux/docs"
 	"denitiawan/research-swagger-gomod-gorillamux/router"
 	"github.com/rs/zerolog/log"
 	"net/http"
 )
 
-// @title Swagger Example API
-// @version 1.0
-// @description This is a sample server Petstore server.
-// @termsOfService http://swagger.io/terms/
+// --------------------------------------------------
+// annotations		: Annotation used for Swagger-UI
+//					and will be mapping to folder and files (./root/docs/**)
+// docs import		: import ( _ "denitiawan/research-swagger-gomod-gin/docs" )
+//					will be used for update all values on all files inside that folder
+//					when you run syntax (swag init)
+// url swagger-ui 	: http://localhost:8899/nexsoft/doc/api/swagger/index.html
+// --------------------------------------------------
+// @version		1.1.0
+// @title 		Demo Swagger-UI (GO+GORILLA MUX) for Nexsoft Project
+// @description Implement swagger-ui on Go project with Gorilla Mux (web framework) + JWT Authorization
+// @host 		localhost:8810
+// @BasePath 	/
 
-// @contact.name API Support
-// @contact.url http://www.swagger.io/support
-// @contact.email support@swagger.io
-
-// @license.name Apache 2.0
-// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
-
-// @host petstore.swagger.io
-// @BasePath /v2
+// ------showing authorize button (but validation jwt is not working)---------
+// @Security Authorization
+// @securityDefinitions.apikey Authorization
+// @in header
+// @name Authorization
+// @schemes http
+// ------showing authorize button (but validation jwt is not working)---------
 func main() {
 
-	log.Info().Msg("Started Server!")
+	log.Info().Msg("Try to start Application!")
+
+	// App Config
+	appConfig, err := config.LoadConfig(".", "dev")
+	error.ErrorPanic(err)
 
 	// # Database Connection
-	db := config.DatabaseConnection()
+	db := config.DatabaseConnection(appConfig)
 
 	// # Database Migration
-	//config.DatabaseMigration(db)
+	config.DatabaseMigration(appConfig, db)
 
 	// # Routes Config
 	appRoute := router.NewRouterInit()
 
 	// # Swagger
-	router.SwaggerRouting("http://localhost:8899", appRoute)
+	config.SwaggerRouting(appRoute)
 
 	// # API Registration
-	router.APIRouting(db, appRoute)
+	router.APIRouting(appConfig, db, appRoute)
 
 	// # Http Handle
 	http.Handle("/", appRoute)
 
 	// # Server
 	server := &http.Server{
-		Addr:    ":8899",
+		Addr:    ":" + appConfig.ServerPort,
 		Handler: appRoute,
 	}
 
+	log.Info().Msg("Yea Boy!.. Application is running!")
+
 	// # Serve
-	err := server.ListenAndServe()
-	helper.ErrorPanic(err)
+	err = server.ListenAndServe()
+	error.ErrorPanic(err)
 
 	defer db.Close()
 }

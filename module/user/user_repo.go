@@ -1,9 +1,11 @@
 package user
 
+import "denitiawan/research-swagger-gomod-gorillamux/common/dto"
+
 type UserRepo interface {
-	Save(model User)
-	Update(model User)
-	Delete(modelId int)
-	FindById(modelId int) (model User, err error)
-	FindAll() []User
+	Create(model *User) *dto.ImplResponse
+	Update(model User) *dto.ImplResponse
+	Delete(id int64) *dto.ImplResponse
+	FindById(id int64) *dto.ImplResponse
+	FindAll() *dto.ImplResponse
 }

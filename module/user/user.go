@@ -1,10 +1,17 @@
 package user
 
-import "database/sql"
-
 type User struct {
-	Id       sql.NullInt64  `db:"users.id" fieldtag:"view"`
-	Name     sql.NullString `db:"users.name" fieldtag:"view"`
-	Username sql.NullString `db:"users.username" fieldtag:"view"`
-	Password sql.NullString `db:"users.password" fieldtag:"view"`
+	Id       int64  `db:"users.id" fieldtag:"view"`
+	Name     string `db:"users.name" fieldtag:"view"`
+	Username string `db:"users.username" fieldtag:"view"`
+	Password string `db:"users.password" fieldtag:"view"`
+}
+
+func NewUser(id int64, name string, username string, password string) *User {
+	return &User{
+		Id:       id,
+		Name:     name,
+		Username: username,
+		Password: password,
+	}
 }

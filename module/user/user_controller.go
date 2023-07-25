@@ -1,44 +1,166 @@
 package user
 
 import (
+	"context"
 	baseController "denitiawan/research-swagger-gomod-gorillamux/common/controller"
-	"net/http"
-
+	"encoding/json"
+	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
+	"io/ioutil"
+	"net/http"
+	"strconv"
 )
 
 type UserController struct {
-	prodcutService UserService
+	service UserService
+	ctx     context.Context
 }
 
-func NewUserController(service UserService) *UserController {
+func NewUserController(contx context.Context, service UserService) *UserController {
 	return &UserController{
-		prodcutService: service,
+		service: service,
+		ctx:     contx,
 	}
 }
 
-func (controller *UserController) Create(response http.ResponseWriter, request *http.Request) {
-	log.Info().Msg("Create")
-	baseController.CreateWebResponse(http.StatusOK, "OK", "Create", response, request)
+// @Tags			user
+// @Router			/v1/user/save [post]
+// @Summary			save
+// @Description		save
+// @Param			RequestBody body user.UserDto true "UserDto.go"
+// @Param			Authorization header string true "Authorization"
+// @Produce			application/json
+// @Success			200 {object} user.UserDto{} "Response Success (UserDto.go)"
+func (c *UserController) Create(response http.ResponseWriter, request *http.Request) {
+	// req body
+	reqBody, _ := ioutil.ReadAll(request.Body)
+	var dto UserDto
+	json.Unmarshal(reqBody, &dto)
+
+	// service
+	res := c.service.Create(dto)
+	if res.Error != nil {
+		baseController.Error(res.Message, nil, res.ErrorMessage, response, request)
+		return
+	}
+
+	// ok
+	baseController.OK(res.Message, res.Data, "", response, request)
 }
 
-func (controller *UserController) Update(response http.ResponseWriter, request *http.Request) {
+// @Tags			user
+// @Router			/v1/user/update/{id} [put]
+// @Summary			update
+// @Description		update
+// @Param			Authorization header string true "Authorization"
+// @Param			id  path int true "id"
+// @Param			RequestBody body UserDto true "UserDto.go"
+// @Produce			application/json
+// @Success			200 {object} user.UserDto{} "Response Success (UserDto.go)"
+func (c *UserController) Update(response http.ResponseWriter, request *http.Request) {
 	log.Info().Msg("Update")
-	baseController.CreateWebResponse(http.StatusOK, "OK", "Update", response, request)
+
+	// req Id
+	vars := mux.Vars(request)
+	param, err := strconv.Atoi(vars["Id"])
+	if err != nil {
+		baseController.BadRequest("Invalid request", nil, "", response, request)
+		return
+	}
+	dtoId, _ := strconv.ParseInt(strconv.Itoa(param), 0, 64)
+
+	// req body
+	reqBody, _ := ioutil.ReadAll(request.Body)
+	var dto UserDto
+	json.Unmarshal(reqBody, &dto)
+
+	// service
+	res := c.service.Update(dtoId, dto)
+	if res.Error != nil {
+		baseController.Error(res.Message, nil, res.ErrorMessage, response, request)
+		return
+	}
+
+	baseController.OK(res.Message, res.Data, "", response, request)
 }
 
-func (controller *UserController) Delete(response http.ResponseWriter, request *http.Request) {
+// @Tags			user
+// @Router			/v1/user/delete/{id} [delete]
+// @Summary			delete
+// @Description		delete
+// @Param			Authorization header string true "Authorization"
+// @Param			id  path int true "id"
+// @Produce			application/json
+// @Success			200 {object} user.UserDto{} "Response Success (UserDto.go)"
+func (c *UserController) Delete(response http.ResponseWriter, request *http.Request) {
 	log.Info().Msg("Delete")
-	baseController.CreateWebResponse(http.StatusOK, "OK", "Delete", response, request)
+	// req Id
+	vars := mux.Vars(request)
+	param, err := strconv.Atoi(vars["Id"])
+	if err != nil {
+		baseController.BadRequest("Invalid request", nil, "", response, request)
+		return
+	}
+	dtoId, _ := strconv.ParseInt(strconv.Itoa(param), 0, 64)
+
+	// service
+	res := c.service.Delete(dtoId)
+	if res.Error != nil {
+		baseController.Error(res.Message, nil, res.ErrorMessage, response, request)
+		return
+	}
+
+	baseController.OK(res.Message, res.Data, "", response, request)
 }
 
-func (controller *UserController) FindById(response http.ResponseWriter, request *http.Request) {
+// @Tags			user
+// @Router			/v1/user/view/{id} [get]
+// @Summary			view
+// @Description		view
+// @Param			Authorization header string true "Authorization"
+// @Param			id  path int true "id"
+// @Produce			application/json
+// @Success			200 {object} user.UserDto{} "Response Success (UserDto.go)"
+func (c *UserController) FindById(response http.ResponseWriter, request *http.Request) {
 	log.Info().Msg("Update")
-	baseController.CreateWebResponse(http.StatusOK, "OK", "FindById", response, request)
+
+	// req Id
+	vars := mux.Vars(request)
+	param, err := strconv.Atoi(vars["Id"])
+	if err != nil {
+		baseController.BadRequest("Invalid request", nil, "", response, request)
+		return
+	}
+	dtoId, _ := strconv.ParseInt(strconv.Itoa(param), 0, 64)
+
+	// service
+	res := c.service.FindById(dtoId)
+	if res.Error != nil {
+		baseController.Error(res.Message, nil, res.ErrorMessage, response, request)
+		return
+	}
+
+	baseController.OK(res.Message, res.Data, "", response, request)
 
 }
 
-func (controller *UserController) FindAll(response http.ResponseWriter, request *http.Request) {
+// @Tags			user
+// @Router			/v1/user/list [get]
+// @Summary			list
+// @Description		list
+// @Param			Authorization header string true "Authorization"
+// @Produce			application/json
+// @Success			200 {object} user.UserDto{} "Response Success (UserDto.go)"
+func (c *UserController) FindAll(response http.ResponseWriter, request *http.Request) {
 	log.Info().Msg("FindAll")
-	baseController.CreateWebResponse(http.StatusOK, "OK", "FindAll", response, request)
+
+	// service
+	res := c.service.FindAll()
+	if res.Error != nil {
+		baseController.Error(res.Message, nil, res.ErrorMessage, response, request)
+		return
+	}
+
+	// ok
+	baseController.OK(res.Message, res.Data, "", response, request)
 }

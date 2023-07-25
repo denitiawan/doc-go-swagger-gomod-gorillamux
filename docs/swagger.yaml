@@ -1,16 +1,193 @@
-basePath: /v2
-host: petstore.swagger.io
+basePath: /
+definitions:
+  auth.LoginDto:
+    properties:
+      password:
+        maxLength: 200
+        minLength: 1
+        type: string
+      username:
+        maxLength: 200
+        minLength: 1
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  user.UserDto:
+    properties:
+      id:
+        type: integer
+      name:
+        maxLength: 200
+        minLength: 1
+        type: string
+      password:
+        maxLength: 200
+        minLength: 1
+        type: string
+      username:
+        maxLength: 200
+        minLength: 1
+        type: string
+    required:
+    - name
+    - password
+    - username
+    type: object
+host: localhost:8810
 info:
-  contact:
-    email: support@swagger.io
-    name: API Support
-    url: http://www.swagger.io/support
-  description: This is a sample server Petstore server.
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  termsOfService: http://swagger.io/terms/
-  title: Swagger Example API
-  version: "1.0"
-paths: {}
+  contact: {}
+  description: Implement swagger-ui on Go project with Gorilla Mux (web framework)
+    + JWT Authorization
+  title: Demo Swagger-UI (GO+GORILLA MUX) for Nexsoft Project
+  version: 1.1.0
+paths:
+  /v1/auth/login:
+    post:
+      description: Get JWT token for access all APIs
+      parameters:
+      - description: LoginDto.go
+        in: body
+        name: RequestBody
+        required: true
+        schema:
+          $ref: '#/definitions/auth.LoginDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Response Success (UserDto.go)
+          schema:
+            $ref: '#/definitions/user.UserDto'
+      summary: login
+      tags:
+      - auth
+  /v1/user/delete/{id}:
+    delete:
+      description: delete
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Response Success (UserDto.go)
+          schema:
+            $ref: '#/definitions/user.UserDto'
+      summary: delete
+      tags:
+      - user
+  /v1/user/list:
+    get:
+      description: list
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Response Success (UserDto.go)
+          schema:
+            $ref: '#/definitions/user.UserDto'
+      summary: list
+      tags:
+      - user
+  /v1/user/save:
+    post:
+      description: save
+      parameters:
+      - description: UserDto.go
+        in: body
+        name: RequestBody
+        required: true
+        schema:
+          $ref: '#/definitions/user.UserDto'
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Response Success (UserDto.go)
+          schema:
+            $ref: '#/definitions/user.UserDto'
+      summary: save
+      tags:
+      - user
+  /v1/user/update/{id}:
+    put:
+      description: update
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: UserDto.go
+        in: body
+        name: RequestBody
+        required: true
+        schema:
+          $ref: '#/definitions/user.UserDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Response Success (UserDto.go)
+          schema:
+            $ref: '#/definitions/user.UserDto'
+      summary: update
+      tags:
+      - user
+  /v1/user/view/{id}:
+    get:
+      description: view
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Response Success (UserDto.go)
+          schema:
+            $ref: '#/definitions/user.UserDto'
+      summary: view
+      tags:
+      - user
+securityDefinitions:
+  Authorization:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

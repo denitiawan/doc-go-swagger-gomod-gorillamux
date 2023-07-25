@@ -1,9 +1,11 @@
 package user
 
+import "denitiawan/research-swagger-gomod-gorillamux/common/dto"
+
 type UserService interface {
-	Create(dto UserDto)
-	Update(dto UserDto)
-	Delete(dtoId int)
-	FindById(dtoId int) UserDto
-	FindAll() []UserDto
+	Create(requestDto UserDto) *dto.ImplResponse
+	Update(id int64, requestDto UserDto) *dto.ImplResponse
+	Delete(id int64) *dto.ImplResponse
+	FindById(id int64) *dto.ImplResponse
+	FindAll() *dto.ImplResponse
 }

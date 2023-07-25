@@ -4,14 +4,13 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/gobuffalo/packr/v2"
 	"github.com/rs/zerolog/log"
 	migrate "github.com/rubenv/sql-migrate"
 )
 
-func DatabaseConnection() *sql.DB {
+func DatabaseConnection(appConfig AppConfig) *sql.DB {
 
-	db, err := sql.Open("mysql", "user:password@tcp(localhost:3399)/database")
+	db, err := sql.Open(appConfig.DBDriverName, appConfig.DBUsername+":"+appConfig.DBPassword+"@tcp("+appConfig.DBHost+":"+appConfig.DBPort+")/"+appConfig.DBName+"?parseTime=true")
 	if err != nil {
 		log.Error().Msg(err.Error())
 		return nil
@@ -22,28 +21,17 @@ func DatabaseConnection() *sql.DB {
 	return db
 }
 
-func DatabaseMigration(db *sql.DB) {
+func DatabaseMigration(appConfig AppConfig, db *sql.DB) {
 
-	//migration := &migrate.PackrMigrationSource{
-	//	Box: packr.New("migrations", "./db/migration"),
-	//}
-	//
-	//n, err := migrate.Exec(db, "mysql", migration, migrate.Up)
-	//if err != nil {
-	//	// Handle errors!
-	//	log.Error().Msg(err.Error())
-	//	return
-	//}
-	//log.Info().Msg("migrate success" + strconv.Itoa(n))
-
-	// OR: Use migrations from a packr box
-	migrations := &migrate.PackrMigrationSource{
-		Box: packr.New("migrations", "./db/migration"),
+	// Read migrations from a folder:
+	migrations := &migrate.FileMigrationSource{
+		Dir: "db/migration",
 	}
-	n, err := migrate.Exec(db, "mysql", migrations, migrate.Up)
+
+	// Execution all migration files
+	n, err := migrate.Exec(db, appConfig.DBDriverName, migrations, migrate.Up)
 	if err != nil {
-		// Handle errors!
-		log.Error().Msg("Monyeeeeetttttt... " + err.Error())
+		log.Error().Msg("Errror Migration... " + err.Error())
 		return
 	}
 	fmt.Printf("Applied %d migrations!\n", n)

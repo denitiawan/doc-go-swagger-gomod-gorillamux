@@ -1,40 +1,39 @@
 package auth
 
 import (
-	"denitiawan/research-swagger-gomod-gorillamux/common/helper"
-	"denitiawan/research-swagger-gomod-gorillamux/module/user"
+	"denitiawan/research-swagger-gomod-gorillamux/common/dto"
 	"github.com/go-playground/validator/v10"
 )
 
 type AuthServiceImpl struct {
 	AuthRepo AuthRepo
 	Validate *validator.Validate
+	Class    string
 }
 
 func NewAuthServiceImpl(repo AuthRepo, validate *validator.Validate) AuthService {
 	return &AuthServiceImpl{
 		AuthRepo: repo,
 		Validate: validate,
+		Class:    "AuthServiceImpl",
 	}
 }
 
-func (t *AuthServiceImpl) Login(requestDto LoginDto) user.UserDto {
+func (t *AuthServiceImpl) Login(requestDto LoginDto) *dto.ImplResponse {
 
-	// validate
+	function := "Create()"
+
 	err := t.Validate.Struct(requestDto)
-	helper.ErrorPanic(err)
+	if err != nil {
+		return dto.NewImplResponse(t.Class, function, "validate dto failed", err, nil)
+	}
 
 	// repo
-	//data, err := t.AuthRepo.Login(requestDto.Username, requestDto.Password)
-	//helper.ErrorPanic(err)
+	res := t.AuthRepo.Login(requestDto)
+	if res.Error != nil {
+		return dto.NewImplResponse(t.Class, function, res.Message, res.Error, nil)
+	}
 
-	//response := user.UserDto{
-	//	Id:       data.Id,
-	//	Name:     data.Name,
-	//	Username: data.Username,
-	//	Password: data.Password,
-	//}
-	//return response
-
-	return user.UserDto{}
+	// ok
+	return dto.NewImplResponse(t.Class, function, res.Message, nil, res.Data)
 }

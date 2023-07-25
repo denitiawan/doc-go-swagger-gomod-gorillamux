@@ -6,13 +6,14 @@ import (
 	"net/http"
 )
 
-func CreateWebResponse(httpStatusCode int, status string, data interface{}, response http.ResponseWriter, request *http.Request) {
+func createWebResponse(httpStatusCode int, message string, data interface{}, errorMessage string, response http.ResponseWriter, request *http.Request) {
 
 	// response body
 	responseBody := dto.WebResponse{
-		Code:   httpStatusCode,
-		Status: status,
-		Data:   data,
+		Code:         httpStatusCode,
+		Message:      message,
+		Data:         data,
+		ErrorMessage: errorMessage,
 	}
 
 	// response header
@@ -21,4 +22,16 @@ func CreateWebResponse(httpStatusCode int, status string, data interface{}, resp
 	// write response
 	json.NewEncoder(response).Encode(responseBody)
 
+}
+
+func OK(message string, data interface{}, errorMessage string, response http.ResponseWriter, request *http.Request) {
+	createWebResponse(http.StatusOK, message, data, errorMessage, response, request)
+}
+
+func BadRequest(message string, data interface{}, errorMessage string, response http.ResponseWriter, request *http.Request) {
+	createWebResponse(http.StatusBadRequest, message, data, errorMessage, response, request)
+}
+
+func Error(message string, data interface{}, errorMessage string, response http.ResponseWriter, request *http.Request) {
+	createWebResponse(http.StatusInternalServerError, message, data, errorMessage, response, request)
 }
