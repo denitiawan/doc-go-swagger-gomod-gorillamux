@@ -15,12 +15,12 @@ import (
 // docs import		: import ( _ "denitiawan/research-swagger-gomod-gin/docs" )
 //					will be used for update all values on all files inside that folder
 //					when you run syntax (swag init)
-// url swagger-ui 	: http://localhost:8899/nexsoft/doc/api/swagger/index.html
+// url swagger-ui 	: http://localhost:5050/nexsoft/doc/api/swagger/index.html
 // --------------------------------------------------
 // @version		1.1.0
 // @title 		Demo Swagger-UI (GO+GORILLA MUX) for Nexsoft Project
 // @description Implement swagger-ui on Go project with Gorilla Mux (web framework) + JWT Authorization
-// @host 		localhost:8810
+// @host 		localhost:5050
 // @BasePath 	/
 
 // ------showing authorize button (but validation jwt is not working)---------
