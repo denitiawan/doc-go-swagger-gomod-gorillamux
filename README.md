@@ -45,12 +45,12 @@ Mysql
 # run syntax
 docker-compose up -d
 
-# docker will create docker image (swg_go_mysql)
+# docker will create docker container (mysql)
 host: localhost
-port: 3399      
+port: 3332      
 user: user
 password: password
-database : database
+database : db_mysql
 ```
 
 ## postman

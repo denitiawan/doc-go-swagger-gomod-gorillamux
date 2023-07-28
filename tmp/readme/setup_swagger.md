@@ -1,15 +1,16 @@
 [Back](https://github.com/denitiawan/research-swagger-gomod-gin/blob/main/README.md)
 
 ## How to setup swagger on Go Project + Gorila Mux
-![image](https://github.com/denitiawan/research-swagger-gomod-gorillamux/assets/11941308/bb575a1f-3fd1-4a0b-a253-bfb50815abc0)
 
-### 1. Install Swagger-CLI
+![image](https://github.com/denitiawan/research-swagger-gomod-gorillamux/assets/11941308/89fcd4f1-3f89-465f-b510-d589cc92e642)
+
+###  Install Swagger-CLI
 
 install swag cli
 
 ```
-go get -u github.com/swaggo/swag/cmd/swag
 go install github.com/swaggo/swag/cmd/swag@v1.8.12
+go get -u github.com/swaggo/swag/cmd/swag
 ```
 
 test swag cli success installed
@@ -38,89 +39,51 @@ GLOBAL OPTIONS:
    --version, -v  print the version (default: false)
 ```
 
-### 2. Install Swagger librarries
+### Install Swagger librarries
 
 ```
-github.com/swaggo/files v1.0.1
-github.com/swaggo/gin-swagger v1.6.0
+github.com/swaggo/http-swagger/v2 v2.0.1
+github.com/swaggo/swag v1.8.1
 ```
 
-### 3. Add Swagger route on main.go
-- path swagger is customable
-- path (/*any) is required for load the html page own by swagger
+### Generate Swagger Docs
 ```
-import(
-    swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
-	)
-
-...
-...
-router.GET("nexsoft/doc/api/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-...
-...
-```
-
-### 4. Add Swagger annotation on main.go
-
-do initial swagger doc
-
-```
+# run command on terminal
 swag init
 ```
+![image](https://github.com/denitiawan/research-swagger-gomod-gorillamux/assets/11941308/f215b733-1adf-4a9d-a903-ceea25b4dfee)
 
-this comman will generate folder and files, and will update all swagger files when running (swag init)
 
+### Add Swagger Annotation on Main.go
 ```
-./root
-    /docs
-        docs.go
-        swagger.json
-        swagger.yaml       
-```
-
-add import docs folder
-
-```
-_ "denitiawan/research-swagger-gomod-gin/docs"
-```
-
-add annotation above on main function
-
-```
-// --[swagger notes]------------------------------------------
+// --------------------------------------------------
 // annotations		: Annotation used for Swagger-UI
 //					and will be mapping to folder and files (./root/docs/**)
 // docs import		: import ( _ "denitiawan/research-swagger-gomod-gin/docs" )
 //					will be used for update all values on all files inside that folder
 //					when you run syntax (swag init)
-// url swagger-ui 	: http://localhost:8899/nexsoft/doc/api/swagger/index.html
-
-// --[swagger annotation]--------------------------------
+// url swagger-ui 	: http://localhost:5050/nexsoft/doc/api/swagger/index.html
+// --------------------------------------------------
 // @version		1.1.0
-// @title 		Demo Swagger-UI (GO+GIN) for Nexsoft Project
-// @description Implement swagger-ui on Go project with gin (web framework) + JWT Authorization
-// @host 		localhost:8899
-// @BasePath 	/api
+// @title 		Demo Swagger-UI (GO+GORILLA MUX) for Nexsoft Project
+// @description Implement swagger-ui on Go project with Gorilla Mux (web framework) + JWT Authorization
+// @host 		localhost:5050
+// @BasePath 	/
 
-// --[showing authorize button (but validation jwt is not working)]---------
+// ------showing authorize button (but validation jwt is not working)---------
 // @Security Authorization
 // @securityDefinitions.apikey Authorization
 // @in header
 // @name Authorization
 // @schemes http
-
+// ------showing authorize button (but validation jwt is not working)---------
 func main() {
-....
-....
-}
 ```
-![image](https://github.com/denitiawan/research-swagger-gomod-gorillamux/assets/11941308/a8753ccb-6269-4b6c-bae6-899339fa07ff)
+![image](https://github.com/denitiawan/research-swagger-gomod-gorillamux/assets/11941308/3def6f72-87b8-4bc1-b714-2d75e9ea5e9a)
 
-[main.go](https://github.com/denitiawan/research-swagger-gomod-gorillamux/blob/main/main.go)
 
-### 5. Add Swagger annotation on controller
-
+[Main.go](https://github.com/denitiawan/research-swagger-gomod-gorillamux/blob/main/main.go)
+### Add Swagger Annotation on Controller
 add annotation above all controller function (CRUD)
 
 ```
@@ -141,8 +104,50 @@ func (controller *UserController) Create(ctx *gin.Context) {
 ```
 ![image](https://github.com/denitiawan/research-swagger-gomod-gin/assets/11941308/8e613ca2-e6a8-4767-bd02-8ef7d65687ca)
 [UserController.go](https://github.com/denitiawan/research-swagger-gomod-gorillamux/blob/main/module/user/user_controller.go)
-### 6. open swagger ui on web
-update swagger files
+
+
+
+
+
+
+### Add SwaggerRouting and call on main.go
+- path swagger is customable
+- path (/*any) is required for load the html page own by swagger
+```
+
+import (
+	"github.com/gorilla/mux"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
+	"net/http"
+)
+
+// path swagger is customable
+// path (/*any) is required for load the html page own by swagger
+// http://localhost:8810/nexsoft/doc/api/swagger/index.html
+func SwaggerRouting(router *mux.Router) {
+	prefix := "/nexsoft/doc/api"
+	router.PathPrefix(prefix).Handler(httpSwagger.Handler(
+		httpSwagger.URL("doc.json"),
+		//httpSwagger.DeepLinking(true),
+		//httpSwagger.DocExpansion("none"),
+		//httpSwagger.DomID("swagger-ui"),
+	)).Methods(http.MethodGet)
+
+}
+
+```
+```
+main.go{
+...
+...
+config.SwaggerRouting(appRoute)
+...
+...
+```
+[SwaggerConfig.go](https://github.com/denitiawan/research-swagger-gomod-gorillamux/blob/main/config/SwaggerRouting.go)
+
+### Run Application
+update swagger docs
 ```
 swag init
 ```
@@ -152,5 +157,7 @@ go run ./main.go
 ```
 open swagger-ui on browser
 ```
-http://localhost:8810/nexsoft/doc/api/swagger/index.html
+http://localhost:5050/nexsoft/doc/api/swagger/index.html
 ```
+![image](https://github.com/denitiawan/research-swagger-gomod-gorillamux/assets/11941308/2a96faa5-5091-403a-a731-a4f6c3c8cb78)
+
