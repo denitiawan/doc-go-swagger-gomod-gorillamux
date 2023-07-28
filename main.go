@@ -12,7 +12,7 @@ import (
 // --------------------------------------------------
 // annotations		: Annotation used for Swagger-UI
 //					and will be mapping to folder and files (./root/docs/**)
-// docs import		: import ( _ "denitiawan/research-swagger-gomod-gin/docs" )
+// docs import		: import ( _ "denitiawan/research-swagger-gomod-gorillamux/docs" )
 //					will be used for update all values on all files inside that folder
 //					when you run syntax (swag init)
 // url swagger-ui 	: http://localhost:5050/nexsoft/doc/api/swagger/index.html
