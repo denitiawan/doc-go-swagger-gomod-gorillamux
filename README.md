@@ -39,7 +39,7 @@ go mod tidy
 Mysql
 ```
 
-## Run APP
+## Create mysql container
 [docker-compose.yml](https://github.com/denitiawan/research-swagger-gomod-gorillamux/blob/main/docker-compose.yml)
 ```
 # run syntax
@@ -51,6 +51,13 @@ port: 3332
 user: user
 password: password
 database : db_mysql
+```
+## Run App
+- open terminal
+```
+- go mod tidy
+- go get
+- go run ./main.go
 ```
 
 ## postman

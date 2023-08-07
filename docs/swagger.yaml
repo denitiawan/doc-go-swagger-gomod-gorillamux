@@ -3,12 +3,8 @@ definitions:
   auth.LoginDto:
     properties:
       password:
-        maxLength: 200
-        minLength: 1
         type: string
       username:
-        maxLength: 200
-        minLength: 1
         type: string
     required:
     - password
@@ -19,29 +15,23 @@ definitions:
       id:
         type: integer
       name:
-        maxLength: 200
-        minLength: 1
         type: string
       password:
-        maxLength: 200
-        minLength: 1
         type: string
       username:
-        maxLength: 200
-        minLength: 1
         type: string
     required:
     - name
     - password
     - username
     type: object
-host: localhost:8810
+host: localhost:5050
 info:
   contact: {}
   description: Implement swagger-ui on Go project with Gorilla Mux (web framework)
     + JWT Authorization
+  license: {}
   title: Demo Swagger-UI (GO+GORILLA MUX) for Nexsoft Project
-  version: 1.1.0
 paths:
   /v1/auth/login:
     post:
@@ -185,6 +175,8 @@ paths:
       summary: view
       tags:
       - user
+schemes:
+- http
 securityDefinitions:
   Authorization:
     in: header

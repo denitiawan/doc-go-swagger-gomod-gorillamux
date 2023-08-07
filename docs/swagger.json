@@ -1,12 +1,15 @@
 {
+    "schemes": [
+        "http"
+    ],
     "swagger": "2.0",
     "info": {
         "description": "Implement swagger-ui on Go project with Gorilla Mux (web framework) + JWT Authorization",
         "title": "Demo Swagger-UI (GO+GORILLA MUX) for Nexsoft Project",
         "contact": {},
-        "version": "1.1.0"
+        "license": {}
     },
-    "host": "localhost:8810",
+    "host": "localhost:5050",
     "basePath": "/",
     "paths": {
         "/v1/auth/login": {
@@ -234,14 +237,10 @@
             ],
             "properties": {
                 "password": {
-                    "type": "string",
-                    "maxLength": 200,
-                    "minLength": 1
+                    "type": "string"
                 },
                 "username": {
-                    "type": "string",
-                    "maxLength": 200,
-                    "minLength": 1
+                    "type": "string"
                 }
             }
         },
@@ -257,19 +256,13 @@
                     "type": "integer"
                 },
                 "name": {
-                    "type": "string",
-                    "maxLength": 200,
-                    "minLength": 1
+                    "type": "string"
                 },
                 "password": {
-                    "type": "string",
-                    "maxLength": 200,
-                    "minLength": 1
+                    "type": "string"
                 },
                 "username": {
-                    "type": "string",
-                    "maxLength": 200,
-                    "minLength": 1
+                    "type": "string"
                 }
             }
         }

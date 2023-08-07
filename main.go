@@ -62,7 +62,9 @@ func main() {
 		Handler: appRoute,
 	}
 
-	log.Info().Msg("Yea Boy!.. Application is running!")
+	log.Info().Msg("Yea Boy!.. Application is running! " +
+		"API  (http://localhost:" + appConfig.ServerPort + "/v1) & " +
+		"Swagger (http://localhost:" + appConfig.ServerPort + "/nexsoft/doc/api/swager/index.html)  ")
 
 	// # Serve
 	err = server.ListenAndServe()

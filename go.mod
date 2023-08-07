@@ -3,14 +3,17 @@ module denitiawan/research-swagger-gomod-gorillamux
 go 1.18
 
 require (
+	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/go-playground/validator/v10 v10.14.1
 	github.com/go-sql-driver/mysql v1.7.1
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/gorilla/mux v1.8.0
-	github.com/rs/zerolog v1.29.1
+	github.com/rs/zerolog v1.30.0
 	github.com/rubenv/sql-migrate v1.5.1
 	github.com/spf13/viper v1.16.0
 	github.com/swaggo/http-swagger/v2 v2.0.1
 	github.com/swaggo/swag v1.8.1
+	golang.org/x/crypto v0.9.0
 )
 
 require (
@@ -24,7 +27,6 @@ require (
 	github.com/go-openapi/swag v0.19.15 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
-	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
@@ -40,7 +42,6 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.4.2 // indirect
 	github.com/swaggo/files/v2 v2.0.0 // indirect
-	golang.org/x/crypto v0.9.0 // indirect
 	golang.org/x/net v0.10.0 // indirect
 	golang.org/x/sys v0.8.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
