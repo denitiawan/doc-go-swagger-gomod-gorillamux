@@ -39,31 +39,6 @@ go mod tidy
 Mysql
 ```
 
-## Create mysql container
-[docker-compose.yml](https://github.com/denitiawan/research-swagger-gomod-gorillamux/blob/main/docker-compose.yml)
-```
-# run syntax
-docker-compose up -d
-
-# docker will create docker container (mysql)
-host: localhost
-port: 3332      
-user: user
-password: password
-database : db_mysql
-```
-## Run App
-- open terminal
-```
-- go mod tidy
-- go get
-- go run ./main.go
-```
-
-## postman
-[postman](https://github.com/denitiawan/research-swagger-gomod-gorillamux/blob/main/Swagger-GO.18-v%201.0.0.postman_collection.json)
-
-
 
 ## How to setup swagger on (go.mod & Gorilla Mux)
 - [Setup Swagger in GO + Gorilla Mux](https://github.com/denitiawan/research-swagger-gomod-gorillamux/blob/main/tmp/readme/setup_swagger.md)
